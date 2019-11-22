@@ -1,0 +1,36 @@
+.form-upload > input
+{
+    display: none;
+}
+
+.form-upload label
+{
+	color: #495057;
+}
+
+.file-col, .file-blank-col
+{
+	flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-left: 1.5rem !important;
+	margin-right: 1.5rem !important;
+	font-size: 100px;
+	margin-bottom: 50px;
+}
+
+.file-col i
+{
+	color: #f0ffff;
+    text-shadow: 0px 2px 4px #afafaf;
+}
+
+.file-col p
+{
+    font-weight: normal;
+}

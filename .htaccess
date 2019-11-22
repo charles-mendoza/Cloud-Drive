@@ -1,0 +1,12 @@
+# disable directory browsing
+Options -Indexes
+
+# prevent folder listing
+IndexIgnore *
+
+# custom error scripts
+ErrorDocument 400 /cdrive/error/400.html
+ErrorDocument 401 /cdrive/error/401.html
+ErrorDocument 403 /cdrive/error/403.html
+ErrorDocument 404 /cdrive/error/404.html
+ErrorDocument 500 /cdrive/error/500.html
