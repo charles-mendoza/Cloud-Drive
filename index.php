@@ -94,6 +94,17 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="modal-upload">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <?php include('includes/footer.php'); ?>
 </body>
 </html>

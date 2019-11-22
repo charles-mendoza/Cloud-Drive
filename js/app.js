@@ -132,25 +132,20 @@ $('#form-upload').on('change', function() {
 });
 
 $(function() {
-    //var bar = $('.bar');
-    //var percent = $('.percent');
-    //var status = $('#status');
+    var bar = $('.progress-bar');
 
     $('#form-upload').ajaxForm({
         beforeSend: function() {
-            //status.empty();
             var percentVal = '0%';
-            //bar.width(percentVal);
-            //percent.html(percentVal);
+            bar.width(percentVal);
+            $('#modal-upload').modal('toggle');
         },
         uploadProgress: function(event, position, total, percentComplete) {
             var percentVal = percentComplete + '%';
-            //bar.width(percentVal);
-            //percent.html(percentVal);
-            console.log(percentVal);
+            bar.width(percentVal);
         },
         complete: function(xhr) {
-            //status.html(xhr.responseText);
+            $('#modal-upload').modal('toggle');
             console.log(xhr.responseText);
         }
     });
