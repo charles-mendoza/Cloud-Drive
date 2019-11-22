@@ -86,8 +86,8 @@ case 'upload':
 
 		$temp = $_FILES['files']['tmp_name'][$key];
 		$file = $_FILES['files']['name'][$key];
-		$name = pathinfo($file, PATHINFO_FILENAME);
-		$ext = '.'.pathinfo($file, PATHINFO_EXTENSION);
+		$name = pathinfo($_FILES['files']['name'][$key], PATHINFO_FILENAME);
+		$ext = pathinfo($_FILES['files']['name'][$key], PATHINFO_EXTENSION);
 		
 		if(empty($temp))
 			break;
@@ -95,14 +95,14 @@ case 'upload':
 		// handle duplicate file name
 		if (file_exists(UPLOAD_DIR.$file)) {
 			$i = 1;
-			while (file_exists(UPLOAD_DIR.$name.' ('.$i.')'.$ext)) {
+			while (file_exists(UPLOAD_DIR.$name.' ('.$i.').'.$ext)) {
 				$i++;
 			}
-			$name = $name.' ('.$i.')';
+			$file = $name.' ('.$i.').'.$ext;
 		}
 
-		// insert into db
-		$hQuery = $mysqli->query("INSERT INTO file (name, extension) VALUES('$name', '$ext')");
+		// insert into database
+		$hQuery = $mysqli->query("INSERT INTO file (name) VALUES('$file')");
 		if (!$hQuery) {
 			die("ERROR: ".$mysqli->error);
 		}
@@ -115,41 +115,12 @@ case 'upload':
 case 'rename':
 	
 	$file = $_POST['file'];
-	$name = $_POST['new_name'];
+	$newName = $_POST['new_name'];
 
-	$hQuery = $mysqli->query("SELECT * FROM file WHERE id='$file'");
+	$hQuery = $mysqli->query("UPDATE file SET name='$newName' WHERE id='$file'");
 	if (!$hQuery) {
 		die("ERROR: ".$mysqli->error);
 	}
-	$row = $hQuery->fetch_assoc();
-
-	if (empty($name)) {
-		echo $row['name'];
-		exit;
-	}
-
-	if ($name != $row['name']) {
-		// handle duplicate file name
-		if (file_exists(UPLOAD_DIR.$name.$row['extension'])) {
-			$i = 1;
-			while (file_exists(UPLOAD_DIR.$name.' ('.$i.')'.$row['extension'])) {
-				$i++;
-			}
-			$name = $name.' ('.$i.')';
-		}
-
-		// rename file in db
-		$hQuery = $mysqli->query("UPDATE file SET name='$name' WHERE id='$file'");
-		if (!$hQuery) {
-			die("ERROR: ".$mysqli->error);
-		}
-
-		// rename physical file
-		rename(UPLOAD_DIR.$row['name'].$row['extension'], UPLOAD_DIR.$name.$row['extension']);
-	}
-
-	// return renamed file
-	echo $name;
 
 	break;
 
