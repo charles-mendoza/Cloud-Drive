@@ -148,3 +148,8 @@ $(function() {
         }
     });
 });
+
+$('.lazyload').lazyload({
+    threshold: 200,
+    trigger: "appear"
+});
