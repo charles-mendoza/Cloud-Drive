@@ -62,6 +62,11 @@ $('.container .file-col').contextMenu({
         // console.log(file, fileId);
         switch (selectedMenu.text()) {
             case "Download":
+                var name = $('#file-'+fileId+'-name').val();
+                var ext = $('#file-'+fileId+'-ext').val();
+                var file = name+ext;
+                $('#download').attr('href', "uploads/"+file);
+                $('#download').prop('download', file);
                 break;
             case "Rename":
                 $('#newName').attr('value', $('#file-'+fileId+'-name').val());

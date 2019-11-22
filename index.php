@@ -67,9 +67,9 @@
   }
   ?>
   <ul id="context-menu" class="dropdown-menu" role="menu" style="display:none">
-    <li><a href="#">Download</a></li>
+    <li><a id="download">Download</a></li>
     <li><a data-toggle="modal" data-target="#modal-rename">Rename</a></li>
-    <li><a href="#">Delete</a></li>
+    <li><a>Delete</a></li>
   </ul>
   <form class="d-none" id="file-action-form" method="POST" action="action.php">
     <input type="text" name="action" id="file-action">
