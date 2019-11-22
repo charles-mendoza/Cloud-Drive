@@ -73,22 +73,26 @@ $('.container .file-col').contextMenu({
                 $('#rename-id').attr('value', fileId);
                 break;
             case "Restore":
-                // TODO:
-                // count files in row then replace with blank to complete row
                 doFileAction('restore', fileId);
-                file.remove();
-                $('.container .row').append('<div class="file-blank-col"></div>');
+                updateFileCols(file);
                 break;
             case "Delete":
-                // TODO:
-                // count files in row then replace with blank to complete row
                 doFileAction('delete', fileId);
-                file.remove();
-                $('.container .row').append('<div class="file-blank-col"></div>');
+                updateFileCols(file);
                 break;
         }
     }
 });
+
+function updateFileCols(file) {
+    file.remove();
+    console.log($('.file-col').length);
+    if ($('.file-col').length % 6 != 0) {
+        $('.container .row').append('<div class="file-blank-col"></div>');
+    } else {
+        $('.file-blank-col').remove();
+    }
+}
 
 function doFileAction(action, file, rename=false) {
     var form = $('#file-action-form');
