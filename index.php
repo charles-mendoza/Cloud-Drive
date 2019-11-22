@@ -37,10 +37,11 @@
       while ($row = $hQuery->fetch_assoc()) {
           echo '<div class="file-col" id="file-'.$row['id'].'-col">';
           echo '<i class="fa fa-file-text" id="file-'.$row['id'].'"></i>';
-          $file = $row['name'];
+          $file = $row['name'].$row['extension'];
           $file = strlen($file) > FILENAME_MAX ? substr($file,0,FILENAME_MAX-3).'...' : $file;
-          echo '<p>'.$file.'</p>';
+          echo '<p id="file-'.$row['id'].'">'.$file.'</p>';
           echo '<input class="d-none" type="text" value="'.$row['name'].'" id="file-'.$row['id'].'-name">';
+          echo '<input class="d-none" type="text" value="'.$row['extension'].'" id="file-'.$row['id'].'-ext">';
           echo '</div>';
           $col = $col < FILECOL_MAX-1 ? $col+1 : 0;
       }
@@ -70,27 +71,26 @@
     <li><a data-toggle="modal" data-target="#modal-rename">Rename</a></li>
     <li><a href="#">Delete</a></li>
   </ul>
-  <form class="d-none" id="file-action-form">
+  <form class="d-none" id="file-action-form" method="POST" action="action.php">
     <input type="text" name="action" id="file-action">
     <input type="text" name="file" id="file-id">
+    <input type="text" name="new_name" id="file-rename">
   </form>
   <div class="modal fade" id="modal-rename">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form id="form-rename">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <input class="d-none" type="text" name="file" id="rename-id">
-            <input type="text" class="form-control" name="new_name" id="rename">
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success" id="btnRename" name="action" value="rename">Rename</button>
-          </div>
-        </form>
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="d-none" id="rename-id">
+          <input type="text" class="form-control" id="newName" autofocus>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" id="btnRename">Rename</button>
+        </div>
       </div>
     </div>
   </div>
