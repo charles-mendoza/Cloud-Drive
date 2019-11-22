@@ -64,7 +64,7 @@ $('.container .file-col').contextMenu({
             case "Download":
                 break;
             case "Rename":
-                $('#newName').attr('value', $('#file-'+fileId+'-name').val());
+                $('#rename').attr('value', $('#file-'+fileId+'-name').val());
                 $('#rename-id').attr('value', fileId);
                 break;
             case "Restore":
@@ -84,41 +84,24 @@ $('.container .file-col').contextMenu({
     }
 });
 
-function doFileAction(action, file, rename=false) {
-    var form = $('#file-action-form');
-    var post_url = form.attr("action");
-    var request_method = form.attr("method");
-    $('#file-action').attr('value', action);
-    $('#file-id').attr('value', file);
-    $('#file-action-form').ajaxSubmit({
-        url: post_url,
-        type: request_method,
-        success: function(data) {
-            if (rename) {
-                $('#file-'+file+'-name').attr('value', data);
-                data += $('#file-'+file+'-ext').val();
-                renameFile($('#rename-id').val(), data);
-            }
-        }
-    });
-}
-
-$("#newName").keyup(function(event) {
-    if (event.keyCode === 13) {
-        $("#btnRename").click();
-    }
-});
-
 $('#btnRename').on('click', function(e) {
     e.preventDefault();
-    $('#file-rename').attr('value', $('#newName').val());
-    doFileAction('rename', $('#rename-id').val(), true);
+    $('#form-rename').ajaxSubmit({url: 'action.php', type: 'post'});
+    // get file name from db
+    renameFile($('#rename-id').val(), $('#rename').val());
     $('#modal-rename').modal('toggle');
 });
 
 function renameFile(id, name) {
     name = name.length > 13 ? name.substr(0, 10)+'...' : name;
     $('#file-'+id+'-col p').html(name);
+    $('#file-'+id+'-name').attr('value', name);
+}
+
+function doFileAction(action, file) {
+    $('#file-action').attr('value', action);
+    $('#file-id').attr('value', file);
+    $('#file-action-form').ajaxSubmit({url: 'action.php', type: 'post'});
 }
 
 $('#form-upload').on('change', function() {
