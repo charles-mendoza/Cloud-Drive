@@ -124,17 +124,6 @@ case 'rename':
 
 	break;
 
-case 'trash':
-	
-	$file = $_POST['file'];
-
-	$hQuery = $mysqli->query("UPDATE file SET in_trash=1 WHERE id='$file'");
-	if (!$hQuery) {
-		die("ERROR: ".$mysqli->error);
-	}
-
-	break;
-
 case 'restore':
 	
 	$file = $_POST['file'];
@@ -150,21 +139,30 @@ case 'delete':
 	
 	$file = $_POST['file'];
 
-	// get file name
 	$hQuery = $mysqli->query("SELECT * FROM file WHERE id='$file'");
 	if (!$hQuery) {
 		die("ERROR: ".$mysqli->error);
 	}
 	$row = $hQuery->fetch_assoc();
 
-	// delete file from db
-	$hQuery = $mysqli->query("DELETE FROM file WHERE id='$file'");
-	if (!$hQuery) {
-		die("ERROR: ".$mysqli->error);
-	}
+	if ($row['in_trash'] == 1)
+	{
+		// delete file from db
+		$hQuery = $mysqli->query("DELETE FROM file WHERE id='$file'");
+		if (!$hQuery) {
+			die("ERROR: ".$mysqli->error);
+		}
 
-	// delete physical file
-	unlink(UPLOAD_DIR.$row['name']) or die("ERROR: Couldn't delete file.");
+		// delete physical file
+		unlink(UPLOAD_DIR.$row['name']) or die("ERROR: Couldn't delete file.");
+
+	} else {
+
+		$hQuery = $mysqli->query("UPDATE file SET in_trash=1 WHERE id='$file'");
+		if (!$hQuery) {
+			die("ERROR: ".$mysqli->error);
+		}
+	}
 
 	break;
 

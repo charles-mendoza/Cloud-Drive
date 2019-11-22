@@ -29,7 +29,7 @@
           </form>
         </li>
         <li class="nav-item">
-          <a class="nav-link" rel="tooltip" title="" data-placement="bottom" data-original-title="Trash">
+          <a class="nav-link" id="trash" rel="tooltip" title="" data-placement="bottom" data-original-title="Trash">
             <i class="fa fa-trash"></i>
           </a>
         </li>

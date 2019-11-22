@@ -55,10 +55,11 @@
 $('.container .file-col').contextMenu({
     menuSelector: "#context-menu",
     menuSelected: function (invokedOn, selectedMenu) {
-        //var msg = "You selected the menu item '" + selectedMenu.text() + "' on the value '" + invokedOn + "'";
-        //console.log(msg);
         var file = $('#'+invokedOn+'-col');
         var fileId = invokedOn.replace("file-", '');
+        // var msg = "You selected the menu item '" + selectedMenu.text() + "' on the value '" + invokedOn + "'";
+        // console.log(msg);
+        // console.log(file, fileId);
         switch (selectedMenu.text()) {
             case "Download":
                 break;
@@ -69,6 +70,13 @@ $('.container .file-col').contextMenu({
                 // rename file in db
                 doFileAction('rename', fileId);
                 break;
+            case "Restore":
+                // TODO:
+                // set in_trash to 0 in db
+                // count files in row then replace with blank to complete row
+                doFileAction('restore', fileId);
+                $('.container .row').append('<div class="file-blank-col"></div>');
+                break;
             case "Delete":
                 // TODO:
                 // set in_trash to 1 in db
@@ -77,23 +85,25 @@ $('.container .file-col').contextMenu({
                 file.remove();
                 $('.container .row').append('<div class="file-blank-col"></div>');
                 break;
-            case "Restore":
-                // TODO:
-                // set in_trash to 0 in db
-                // count files in row then replace with blank to complete row
-                doFileAction('restore', restore);
-                $('.container .row').append('<div class="file-blank-col"></div>');
-                break;
         }
     }
 });
 
 function doFileAction(action, file) {
-    var form = $('#file-action-form');
-    form.find('.action').val(action);
-    form.find('.file').val(file);
-    form.ajaxSubmit({url: 'action.php', type: 'post'});
+    $('#file-action').attr('value', action);
+    $('#file-id').attr('value', file);
+    $('#file-action-form').ajaxSubmit({url: 'action.php', type: 'post'});
 }
+
+$('#trash').on('click', function() {
+    // TODO: list all files in trash
+    var menu = $('#context-menu');
+    menu.empty();
+    menu.html(
+        '<li><a href="#">Restore</a></li>' +
+        '<li><a href="#">Delete</a></li>'
+    );
+});
 
 $('#form-upload').on('change', function() {
     $('#form-upload').submit();

@@ -60,9 +60,9 @@
     <li><a href="#">Delete</a></li>
   </ul>
   <form class="d-none" id="file-action-form">
-    <input type="text" name="action">
-    <input type="text" name="file">
-    <input type="text" name="new_name">
+    <input type="text" name="action" id="file-action">
+    <input type="text" name="file" id="file-id">
+    <input type="text" name="new_name" id="file-rename">
   </form>
   <?php include('includes/footer.php'); ?>
 </body>
