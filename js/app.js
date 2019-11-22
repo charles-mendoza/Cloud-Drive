@@ -86,7 +86,6 @@ $('.container .file-col').contextMenu({
 
 function updateFileCols(file) {
     file.remove();
-    console.log($('.file-col').length);
     if ($('.file-col').length % 6 != 0) {
         $('.container .row').append('<div class="file-blank-col"></div>');
     } else {
@@ -131,11 +130,23 @@ function renameFile(id, name) {
     $('#file-'+id+'-col p').html(name);
 }
 
+$('#btnEmptyTrash').on('click', function(e) {
+    $('#file-action').attr('value', 'empty_trash');
+    $('#file-action-form').submit();
+});
+
 $('#form-upload').on('change', function() {
     $('#form-upload').submit();
 });
 
 $(function() {
+
+    // update empty trash button
+    if ($('.file-col').length > 0) {
+        $('#btnEmptyTrash').removeClass('btn-disabled');
+        $('#btnEmptyTrash').addClass('btn-danger');
+    }
+
     var bar = $('.progress-bar');
 
     $('#form-upload').ajaxForm({

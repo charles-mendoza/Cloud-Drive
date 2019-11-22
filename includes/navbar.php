@@ -11,6 +11,12 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ml-auto">
+        <?php if (basename($_SERVER['PHP_SELF']) == 'trash.php') { ?>
+        <li class="nav-item">
+          <button class="btn btn-disabled" type="button" id="btnEmptyTrash">Empty Trash</button>
+        </li>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <?php } ?>
         <li class="nav-item">
           <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="index.php" data-original-title="Home">
             <i class="material-icons">home</i>

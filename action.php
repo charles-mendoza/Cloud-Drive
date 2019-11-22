@@ -205,7 +205,7 @@ case 'empty_trash':
 	}
 
 	// delete all files in trash
-	while ($row = $hQuery->fetch_row()) {
+	while ($row = $hQuery->fetch_assoc()) {
 		unlink(UPLOAD_DIR.$row['name'].$row['extension']) or die("ERROR: Couldn't delete file.");
 	}
 
@@ -215,7 +215,8 @@ case 'empty_trash':
 		die("ERROR: ".$mysqli->error);
 	}
 
-	break;
+	header("location: trash.php");
+	exit;
 }
 
 ?>
