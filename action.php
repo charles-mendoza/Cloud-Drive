@@ -100,6 +100,7 @@ case 'upload':
 			}
 			$name = $name.' ('.$i.')';
 		}
+		$file = $name.$ext;
 
 		// insert into db
 		$hQuery = $mysqli->query("INSERT INTO file (name, extension) VALUES('$name', '$ext')");
