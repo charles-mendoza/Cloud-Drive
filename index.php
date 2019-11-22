@@ -19,28 +19,39 @@
 <body class="<?php if (!isset($_SESSION['logged_in'])) echo "login-page" ?> sidebar-collapse">
   <?php
   include('includes/navbar.php');
+
   if (isset($_SESSION['logged_in'])) {
-    $COLMAX = 6;
-    $nFiles = 40;
-    $col = -1;
-    if ($nFiles > 0) {
+
+    $hQuery = $mysqli->query("SELECT * FROM file WHERE in_trash=0");
+    if ($mysqli->connect_error) {
+      die("ERROR: ".$mysqli->error);
+    }
+
+    if ($hQuery->num_rows > 0) {
+
       echo '<div class="container overflow-auto" style="min-height:40em">';
       echo '<div class="row ml-auto mr-auto">';
-      for ($i = 0; $i < $nFiles; $i++) {
-          echo '<div class="file-col" id="file-'.$i.'-col">'; // id is from file id in database
-          echo '<i class="fa fa-file-text" id="file-'.$i.'"></i>';
-          $file = "konichiwa.txt";
+
+      // list all files that aren't in trash
+      $col = -1;
+      while ($row = $hQuery->fetch_assoc()) {
+          echo '<div class="file-col" id="file-'.$row['id'].'-col">';
+          echo '<i class="fa fa-file-text" id="file-'.$row['id'].'"></i>';
+          $file = $row['name'];
           $file = strlen($file) > FILENAME_MAX ? substr($file,0,FILENAME_MAX-3).'...' : $file;
           echo '<p>'.$file.'</p>';
+          echo '<input class="d-none" type="text" value="'.$row['name'].'" id="file-'.$row['id'].'-name">';
           echo '</div>';
-          $col = $col < $COLMAX-1 ? $col+1 : 0;
+          $col = $col < FILECOL_MAX-1 ? $col+1 : 0;
       }
 
-      $remaining = $COLMAX-($col+1);
+      // fill remaining empty columns so files are aligned
+      $remaining = FILECOL_MAX-($col+1);
       for ($i = 0; $i < $remaining; $i++) {
         echo '<div class="file-blank-col"></div>';
       }
       echo '</div></div>';
+
     } else {
       echo '<div class="page-header"><div class="container text-center"><h2 class="text-muted">No Files</h2></div></div>';
       ?>
@@ -54,16 +65,35 @@
     echo '<div class="page-header"><div class="container text-center"><h2 class="text-muted">Login to Explore Files</h2></div></div>';
   }
   ?>
-  <ul id="context-menu" class="dropdown-menu" role="menu" style="display:none" >
+  <ul id="context-menu" class="dropdown-menu" role="menu" style="display:none">
     <li><a href="#">Download</a></li>
-    <li><a href="#">Rename</a></li>
+    <li><a data-toggle="modal" data-target="#modal-rename">Rename</a></li>
     <li><a href="#">Delete</a></li>
   </ul>
   <form class="d-none" id="file-action-form">
     <input type="text" name="action" id="file-action">
     <input type="text" name="file" id="file-id">
-    <input type="text" name="new_name" id="file-rename">
   </form>
+  <div class="modal fade" id="modal-rename">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="form-rename">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input class="d-none" type="text" name="file" id="rename-id">
+            <input type="text" class="form-control" name="new_name" id="rename">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" id="btnRename" name="action" value="rename">Rename</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <?php include('includes/footer.php'); ?>
 </body>
 </html>

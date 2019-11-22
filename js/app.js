@@ -64,22 +64,17 @@ $('.container .file-col').contextMenu({
             case "Download":
                 break;
             case "Rename":
-                // TODO:
-                // show edit name input of file
-                // set #file-action-form .new_name
-                // rename file in db
-                doFileAction('rename', fileId);
+                $('#rename').attr('value', $('#file-'+fileId+'-name').val());
+                $('#rename-id').attr('value', fileId);
                 break;
             case "Restore":
                 // TODO:
-                // set in_trash to 0 in db
                 // count files in row then replace with blank to complete row
                 doFileAction('restore', fileId);
                 $('.container .row').append('<div class="file-blank-col"></div>');
                 break;
             case "Delete":
                 // TODO:
-                // set in_trash to 1 in db
                 // count files in row then replace with blank to complete row
                 doFileAction('delete', fileId);
                 file.remove();
@@ -89,21 +84,25 @@ $('.container .file-col').contextMenu({
     }
 });
 
+$('#btnRename').on('click', function(e) {
+    e.preventDefault();
+    $('#form-rename').ajaxSubmit({url: 'action.php', type: 'post'});
+    // get file name from db
+    renameFile($('#rename-id').val(), $('#rename').val());
+    $('#modal-rename').modal('toggle');
+});
+
+function renameFile(id, name) {
+    name = name.length > 13 ? name.substr(0, 10)+'...' : name;
+    $('#file-'+id+'-col p').html(name);
+    $('#file-'+id+'-name').attr('value', name);
+}
+
 function doFileAction(action, file) {
     $('#file-action').attr('value', action);
     $('#file-id').attr('value', file);
     $('#file-action-form').ajaxSubmit({url: 'action.php', type: 'post'});
 }
-
-$('#trash').on('click', function() {
-    // TODO: list all files in trash
-    var menu = $('#context-menu');
-    menu.empty();
-    menu.html(
-        '<li><a href="#">Restore</a></li>' +
-        '<li><a href="#">Delete</a></li>'
-    );
-});
 
 $('#form-upload').on('change', function() {
     $('#form-upload').submit();
