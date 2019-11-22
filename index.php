@@ -35,7 +35,6 @@
       // list all files that aren't in trash
       $col = -1;
       while ($row = $hQuery->fetch_assoc()) {
-          echo '<div class="lazyload"><!--';
           echo '<div class="file-col" id="file-'.$row['id'].'-col">';
           echo '<i class="fa fa-file-text" id="file-'.$row['id'].'"></i>';
           $file = $row['name'].$row['extension'];
@@ -43,7 +42,7 @@
           echo '<p id="file-'.$row['id'].'">'.$file.'</p>';
           echo '<input class="d-none" type="text" value="'.$row['name'].'" id="file-'.$row['id'].'-name">';
           echo '<input class="d-none" type="text" value="'.$row['extension'].'" id="file-'.$row['id'].'-ext">';
-          echo '</div>--></div>';
+          echo '</div>';
           $col = $col < FILECOL_MAX-1 ? $col+1 : 0;
       }
 
