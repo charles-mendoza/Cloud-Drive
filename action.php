@@ -183,7 +183,7 @@ case 'delete':
 		}
 
 		// delete physical file
-		unlink(UPLOAD_DIR.$row['name']) or die("ERROR: Couldn't delete file.");
+		unlink(UPLOAD_DIR.$row['name'].$row['extension']) or die("ERROR: Couldn't delete file.");
 
 	} else {
 
@@ -205,7 +205,7 @@ case 'empty_trash':
 
 	// delete all files in trash
 	while ($row = $hQuery->fetch_row()) {
-		unlink(UPLOAD_DIR.$row['name']) or die("ERROR: Couldn't delete file.");
+		unlink(UPLOAD_DIR.$row['name'].$row['extension']) or die("ERROR: Couldn't delete file.");
 	}
 
 	// delete all trash files in db
