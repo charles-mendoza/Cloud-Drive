@@ -71,6 +71,7 @@ $('.container .file-col').contextMenu({
                 // TODO:
                 // count files in row then replace with blank to complete row
                 doFileAction('restore', fileId);
+                file.remove();
                 $('.container .row').append('<div class="file-blank-col"></div>');
                 break;
             case "Delete":
