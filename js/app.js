@@ -145,8 +145,6 @@ $(function() {
             bar.width(percentVal);
         },
         complete: function(xhr) {
-            $('#modal-upload').modal('toggle');
-            console.log(xhr.responseText);
         }
     });
 });

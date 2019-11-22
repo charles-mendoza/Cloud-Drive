@@ -99,8 +99,11 @@
       <div class="modal-content">
         <div class="modal-body">
           <div class="progress">
-            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" type="button" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
       </div>
     </div>
