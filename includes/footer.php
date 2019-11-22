@@ -16,7 +16,5 @@
 <script src="js/plugins/moment.min.js"></script>
 <!-- Control Center for Material Kit: parallax effects, scripts for the example pages etc -->
 <script src="js/material-kit.js?v=2.0.4" type="text/javascript"></script>
-<!-- Lazy Load -->
-<script src="js/jquery.lazyload-any.js" type="text/javascript"></script>
 <!-- Custom JS Files -->
 <script src="js/app.js" type="text/javascript"></script>
