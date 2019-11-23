@@ -40,8 +40,6 @@ case 'signup':
 
 	// escape user inputs for security
 	$id = mysqli_real_escape_string($mysqli, $_POST['id']);
-	$first_name = mysqli_real_escape_string($mysqli, $_POST['first_name']);
-	$last_name = mysqli_real_escape_string($mysqli, $_POST['last_name']);
 	$password = mysqli_real_escape_string($mysqli, $_POST['password']);
 
 	if ($password != $_POST['password_confirm']) {
@@ -57,7 +55,7 @@ case 'signup':
 	if ($hQuery->num_rows == 0) {
 		$salt = uniqid(mt_rand(), true);
 		$password = md5(md5($password).$salt);
-		$hQuery = $mysqli->query("INSERT INTO user VALUES('$id', '$first_name', '$last_name', '$password', '$salt', '2')");
+		$hQuery = $mysqli->query("INSERT INTO user VALUES('$id', '$password', '$salt', '2')");
 		if (!$hQuery) {
 			die("ERROR: ".$mysqli->error);
 		}

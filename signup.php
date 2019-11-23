@@ -11,8 +11,8 @@ include('includes/header.php');
 <div class="page-header">
   <div class="container">
     <div class="row">
-      <div class="col-lg-5 col-md-6 ml-auto mr-auto">
-        <div class="card card-login" style="min-height:470px">
+      <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+        <div class="card card-login">
           <form class="form" role="form" method="post" action="action.php">
             <?php if (isset($_GET['error'])) { ?>
               <div class="alert alert-danger alert-block">
@@ -25,16 +25,6 @@ include('includes/header.php');
                 <div class="input-group-prepend">
                   <span class="input-group-text">
                     <i class="material-icons">face</i>
-                  </span>
-                </div>
-                <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name" required autofocus>
-                &nbsp&nbsp&nbsp
-                <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name" required>
-              </div>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="fa fa-id-card"></i>
                   </span>
                 </div>
                 <input id="id" type="text" class="form-control" name="id" pattern="[0-9]+" minlength="4" maxlength="9" placeholder="ID Number" required>

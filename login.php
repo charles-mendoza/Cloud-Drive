@@ -13,14 +13,14 @@
             <?php } else if (isset($_GET['message']) && $_GET['message'] == "signup-success") { ?>
               <div class="alert alert-success alert-block">
                 <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>Successfully signed up! Please login.</strong>
+                <strong>Successfully signed up! Login to continue.</strong>
               </div>
             <?php } ?>
             <div class="card-body">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
-                    <i class="fa fa-id-card"></i>
+                    <i class="material-icons">face</i>
                   </span>
                 </div>
                 <input id="id" type="text" class="form-control" name="id" pattern="[0-9]+" minlength="4" maxlength="9" placeholder="ID Number" required autofocus>
