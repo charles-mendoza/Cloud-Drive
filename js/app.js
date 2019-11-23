@@ -3,7 +3,7 @@ var files = [];
 $(function() {
     // bind context menu for files
     bindContextMenu();
-    
+
     $('.card-login').fadeIn('fast');
 
     // adjust alignments
@@ -20,13 +20,13 @@ $(function() {
         beforeSend: function() {
             var percentVal = '0%';
             bar.width(percentVal);
-            $('#modal-upload').modal('toggle');
         },
         uploadProgress: function(event, position, total, percentComplete) {
             var percentVal = percentComplete + '%';
             bar.width(percentVal);
         },
         complete: function(xhr) {
+            $('#btnUploadClose').removeClass('btn-disabled');
             console.log(xhr.responseText);
         }
     });
@@ -207,5 +207,10 @@ $('#search').on('input', function() {
 });
 
 $('#form-upload').on('change', function() {
+    $('#btnUploadClose').addClass('btn-disabled');
+    $('#modal-upload').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
     $('#form-upload').submit();
 });

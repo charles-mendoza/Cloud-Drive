@@ -68,7 +68,7 @@ if ($loggedIn) {
       </div>
     </div>
   </div>
-  <div class="modal fade" id="modal-upload">
+  <div class="modal fade" id="modal-upload" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
@@ -77,7 +77,7 @@ if ($loggedIn) {
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-success" type="button" data-dismiss="modal" aria-label="Close">Close</button>
+          <button class="btn btn-success" id="btnUploadClose" type="button" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
       </div>
     </div>
