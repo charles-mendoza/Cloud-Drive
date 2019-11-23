@@ -10,17 +10,17 @@ define('FILENAME_MAX', 13);
 define('FILECOL_MAX', 6);
 
 // database credentials
-define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
-define('DB_NAME', 'cdrive_db');
-
+define('DB_SERVER', '{db_server}');
+define('DB_USERNAME', '{db_username}');
+define('DB_PASSWORD', '{db_password}');
+define('DB_NAME', '{db_name}');
+if (DB_SERVER == "{db_server}") { header("location: install"); exit; }
 $mysqli = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if ($mysqli->connect_error) {
 	die("ERROR: ".$mysqli->error);
 }
 
-if (session_id() == '') {
+if (session_id() == "") {
 	session_start();
 }
 

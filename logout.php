@@ -7,6 +7,6 @@ if (isset($_SESSION['logged_in'])) {
 	session_unset();
 }
 
-header("location: index.php");
+header("location: .");
 
 ?>

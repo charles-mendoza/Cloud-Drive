@@ -1,4 +1,6 @@
-<?php include('includes/header.php'); ?>
+<?php
+include('includes/config.php');
+include('includes/header.php'); ?>
 <div class="page-header">
   <div class="container">
     <div class="row">
