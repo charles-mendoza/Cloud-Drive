@@ -121,7 +121,7 @@ $('.file-col').contextMenu({
 
 function updateFileCols() {
     $('.file-blank-col').remove();
-    var col = $('.file-col').length;
+    var col = $('.file-col:visible').length;
     var rem = (6 - (col % 6)) % 6;
     for (var i = 0; i < rem; ++i) {
         $('.container .row').append('<div class="file-blank-col"></div>');
@@ -177,18 +177,15 @@ $('#search').on('input', function() {
             var ext = $(files[i]).find('input[id*="-ext"]').val();
             var file = name+ext;
             if (file.search($(this).val()) == -1) {
-                $('#'+$(files[i]).attr('id')).remove();
+                $('#'+$(files[i]).attr('id')).hide();
             }
         }
     } else {
         for (var i = 0; i < files.length; ++i) {
-            if ($('#'+$(files[i]).attr('id')).length == 0) {
-                $('.container .row').append($(files[i]));
-            }
+            $(files[i]).show();
         }
     }
     updateFileCols();
-    $.contextMenu('update');
 });
 
 $('#form-upload').on('change', function() {
