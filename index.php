@@ -15,22 +15,20 @@ if (isset($_SESSION['logged_in'])) {
     echo '<div class="row ml-auto mr-auto">';
 
     // list all files that aren't in trash
-    $col = -1;
     while ($row = $hQuery->fetch_assoc()) {
-        echo '<div class="file-col" id="file-'.$row['id'].'-col">';
-        echo '<i class="fa fa-file-text" id="file-'.$row['id'].'"></i>';
-        $file = $row['name'].$row['extension'];
-        $file = strlen($file) > FILENAME_MAX ? substr($file,0,FILENAME_MAX-3).'...' : $file;
-        echo '<p id="file-'.$row['id'].'">'.$file.'</p>';
-        echo '<input class="d-none" type="text" value="'.$row['name'].'" id="file-'.$row['id'].'-name">';
-        echo '<input class="d-none" type="text" value="'.$row['extension'].'" id="file-'.$row['id'].'-ext">';
-        echo '</div>';
-        $col = $col < FILECOL_MAX-1 ? $col+1 : 0;
+      echo '<div class="file-col" id="file-'.$row['id'].'-col">';
+      echo '<i class="fa fa-file-text" id="file-'.$row['id'].'"></i>';
+      $file = $row['name'].$row['extension'];
+      $file = strlen($file) > FILENAME_MAX ? substr($file,0,FILENAME_MAX-3).'...' : $file;
+      echo '<p id="file-'.$row['id'].'">'.$file.'</p>';
+      echo '<input class="d-none" type="text" value="'.$row['name'].'" id="file-'.$row['id'].'-name">';
+      echo '<input class="d-none" type="text" value="'.$row['extension'].'" id="file-'.$row['id'].'-ext">';
+      echo '</div>';
     }
 
     // fill remaining empty columns so files are aligned
-    $remaining = FILECOL_MAX-($col+1);
-    for ($i = 0; $i < $remaining; $i++) {
+    $r = (FILECOL_MAX - ($hQuery->num_rows % FILECOL_MAX)) % FILECOL_MAX;
+    for ($i = 0; $i < $r; $i++) {
       echo '<div class="file-blank-col"></div>';
     }
     echo '</div></div>';
