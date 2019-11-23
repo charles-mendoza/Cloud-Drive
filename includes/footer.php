@@ -18,3 +18,5 @@
 <script src="js/material-kit.js?v=2.0.4" type="text/javascript"></script>
 <!-- Custom JS Files -->
 <script src="js/app.js" type="text/javascript"></script>
+</body>
+</html>
