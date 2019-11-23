@@ -70,8 +70,8 @@ case 'signup':
 
 }
 
-// if not logged in and user level is not admin, throw error 401 (unauthorized)
-if (!isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] != 1) {
+// if not admin, throw error 401 (unauthorized)
+if ($_SESSION['logged_in']['usergroup'] != 1) {
 	header('location: error/401.html');
 	exit;
 }
