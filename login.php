@@ -38,7 +38,7 @@
               </div>
             </div>
             <div class="footer text-center">
-              <a href="signup.php" class="btn btn-success btn-link btn-wd btn-lg">Create account</a>
+              <a href="signup" class="btn btn-success btn-link btn-wd btn-lg">Create account</a>
             </div>
           </form>
         </div>

@@ -78,6 +78,6 @@ if (isset($_SESSION['logged_in'])) {
     echo '<div class="page-header"><div class="container text-center"><h2 class="text-muted">No Files</h2></div></div>';
   }
 } else {
-  echo '<div class="page-header"><div class="container text-center"><h2><a class="text-muted" href="login.php">Login to View Files</a></h2></div></div>';
+  echo '<div class="page-header"><div class="container text-center"><h2><a class="text-muted" href="login">Login to View Files</a></h2></div></div>';
 }
 include('includes/footer.php'); ?>

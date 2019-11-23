@@ -53,13 +53,13 @@ switch (basename($_SERVER['PHP_SELF'])) {
           </li>
           <?php } ?>
           <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="index.php" data-original-title="Home">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="." data-original-title="Home">
               <i class="material-icons">home</i>
             </a>
           </li>
           <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] == 1) { ?>
           <li class="nav-item">
-            <form class="form-upload" id="form-upload" method="post" action="action.php" enctype="multipart/form-data">
+            <form class="form-upload" id="form-upload" method="post" action="action" enctype="multipart/form-data">
               <label class="m-0 p-0" for="file-input">
                 <a class="nav-link" rel="tooltip" title="" data-placement="bottom" data-original-title="Upload">
                   <i class="material-icons">cloud_upload_alt</i>
@@ -70,25 +70,25 @@ switch (basename($_SERVER['PHP_SELF'])) {
             </form>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="trash" rel="tooltip" title="" data-placement="bottom" href="trash.php" data-original-title="Trash">
+            <a class="nav-link" id="trash" rel="tooltip" title="" data-placement="bottom" href="trash" data-original-title="Trash">
               <i class="fa fa-trash"></i>
             </a>
           </li>
           <?php } if (isset($_SESSION['logged_in'])) { ?>
           <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="logout.php" data-original-title="Logout">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="logout" data-original-title="Logout">
               <i class="fa fa-sign-out"></i>
             </a>
           </li>
           <?php } else { ?>
           <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="login.php" data-original-title="Login">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="login" data-original-title="Login">
               <i class="fa fa-sign-in"></i>
             </a>
           </li>
           <?php } if (!isset($_SESSION['logged_in'])) { ?>
           <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="signup.php" data-original-title="Sign Up">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="signup" data-original-title="Sign Up">
               <i class="material-icons">account_box</i>
             </a>
           </li>

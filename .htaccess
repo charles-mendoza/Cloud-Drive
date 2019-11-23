@@ -1,3 +1,5 @@
+RewriteEngine on
+
 # disable directory browsing
 Options -Indexes
 
@@ -10,3 +12,12 @@ ErrorDocument 401 /cdrive/error/401.html
 ErrorDocument 403 /cdrive/error/403.html
 ErrorDocument 404 /cdrive/error/404.html
 ErrorDocument 500 /cdrive/error/500.html
+
+# enable page access without extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [NC,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [NC,L]
