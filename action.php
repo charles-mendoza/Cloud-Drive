@@ -26,12 +26,12 @@ case 'login':
 		$password = md5(md5($password).$row['salt']);
 		if ($password == $row['password']) {
 			$_SESSION['logged_in'] = $row;
-			header("location: index.php");
+			header("location: .");
 		} else {
-			header("location: login.php?error=invalid-user");
+			header("location: login?error=invalid-user");
 		}
 	} else {
-		header("location: login.php?error=invalid-user");
+		header("location: login?error=invalid-user");
 	}
 
 	exit;
@@ -43,7 +43,7 @@ case 'signup':
 	$password = mysqli_real_escape_string($mysqli, $_POST['password']);
 
 	if ($password != $_POST['password_confirm']) {
-		header("location: signup.php?error=password");
+		header("location: signup?error=password");
 		exit;
 	}
 
@@ -59,9 +59,9 @@ case 'signup':
 		if (!$hQuery) {
 			die("ERROR: ".$mysqli->error);
 		}
-		header("location: login.php?message=signup-success");
+		header("location: login?message=signup-success");
 	} else {
-		header("location: signup.php?error=user-exists");
+		header("location: signup?error=user-exists");
 	}
 
 	exit;
@@ -219,7 +219,7 @@ case 'empty_trash':
 		die("ERROR: ".$mysqli->error);
 	}
 
-	header("location: trash.php");
+	header("location: trash");
 	exit;
 }
 
