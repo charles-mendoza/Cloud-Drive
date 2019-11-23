@@ -43,7 +43,7 @@ switch (basename($_SERVER['PHP_SELF'])) {
       </div>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <?php if (basename($_SERVER['PHP_SELF']) == 'index.php') { ?>
+          <?php if (isset($_SESSION['logged_in']) && basename($_SERVER['PHP_SELF']) == 'index.php') { ?>
             <li class="nav-item">
               <input type="text" class="form-control" placeholder="Search File" id="search"></input>
             </li>
