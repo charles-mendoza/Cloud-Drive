@@ -34,7 +34,7 @@ case 'login':
 		header("location: login.php?error=invalid-user");
 	}
 
-	break;
+	exit;
 
 case 'signup':
 
@@ -66,7 +66,7 @@ case 'signup':
 		header("location: signup.php?error=user-exists");
 	}
 
-	break;
+	exit;
 
 }
 
@@ -111,7 +111,7 @@ case 'upload':
 		move_uploaded_file($temp, UPLOAD_DIR.$file);
 	}
 
-	break;
+	exit;
 
 case 'rename':
 	
@@ -125,8 +125,7 @@ case 'rename':
 	$row = $hQuery->fetch_assoc();
 
 	if (empty($name)) {
-		echo $row['name'];
-		exit;
+		die($row['name']);
 	}
 
 	if ($name != $row['name']) {
@@ -152,7 +151,7 @@ case 'rename':
 	// return renamed file
 	echo $name;
 
-	break;
+	exit;
 
 case 'restore':
 	
@@ -163,7 +162,7 @@ case 'restore':
 		die("ERROR: ".$mysqli->error);
 	}
 
-	break;
+	exit;
 
 case 'delete':
 	
@@ -194,7 +193,7 @@ case 'delete':
 		}
 	}
 
-	break;
+	exit;
 
 case 'empty_trash':
 	
