@@ -1,14 +1,16 @@
 var files = [];
 
 $(function() {
+    // bind context menu for files
+    bindContextMenu();
+
     // adjust alignments
     updateFiles();
     if ($('.file-col').length > 0) {
+        files = $('.file-col');
         $('#btnEmptyTrash').removeClass('btn-disabled');
         $('#btnEmptyTrash').addClass('btn-danger');
-        files = $('.file-col');
     }
-    $('footer').removeClass('d-none');
 
     // upload progress bar
     var bar = $('.progress-bar');
@@ -26,8 +28,6 @@ $(function() {
             console.log(xhr.responseText);
         }
     });
-
-    bindContextMenu();
 });
 
 function updateFiles() {
