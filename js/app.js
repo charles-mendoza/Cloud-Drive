@@ -2,15 +2,11 @@ var files = [];
 
 $(function() {
     // adjust alignments
-    updateFileCols();
+    updateFiles();
     if ($('.file-col').length > 0) {
         $('#btnEmptyTrash').removeClass('btn-disabled');
         $('#btnEmptyTrash').addClass('btn-danger');
-        $('footer').css('bottom','auto');
         files = $('.file-col');
-    } else {
-        $(this).addClass('login-page');
-        $('#sectionsNav').addClass('fixed-top');
     }
     $('footer').removeClass('d-none');
 
@@ -27,9 +23,34 @@ $(function() {
             bar.width(percentVal);
         },
         complete: function(xhr) {
+            console.log(xhr.responseText);
         }
     });
+
+    bindContextMenu();
 });
+
+function updateFiles() {
+    $('.file-blank-col').remove();
+    var col = $('.file-col:visible').length;
+    var rem = (6 - (col % 6)) % 6;
+    for (var i = 0; i < rem; ++i) {
+        $('.container .row').append('<div class="file-blank-col"></div>');
+    }
+    if (col > 0) {
+        $(this).removeClass('login-page');
+        $('#sectionsNav').removeClass('fixed-top');
+        $('#page-header').removeClass('page-header');
+        $('#trash-empty').hide();
+        $('#no-files').hide();
+    } else {
+        $(this).addClass('login-page');
+        $('#sectionsNav').addClass('fixed-top');
+        $('#page-header').addClass('page-header');
+        $('#trash-empty').show();
+        $('#no-files').show();
+    }
+}
 
 (function ($, window) {
 
@@ -85,47 +106,40 @@ $(function() {
     };
 })(jQuery, window);
 
-$('.file-col').contextMenu({
-    menuSelector: "#context-menu",
-    menuSelected: function (invokedOn, selectedMenu) {
-        var file = $('#'+invokedOn+'-col');
-        var fileId = invokedOn.replace("file-", '');
-        // var msg = "You selected the menu item '" + selectedMenu.text() + "' on the value '" + invokedOn + "'";
-        // console.log(msg);
-        // console.log(file, fileId);
-        switch (selectedMenu.text()) {
-            case "Download":
-                var name = $('#file-'+fileId+'-name').val();
-                var ext = $('#file-'+fileId+'-ext').val();
-                var file = name+ext;
-                $('#download').attr('href', "uploads/"+file);
-                $('#download').prop('download', file);
-                break;
-            case "Rename":
-                $('#newName').attr('value', $('#file-'+fileId+'-name').val());
-                $('#rename-id').attr('value', fileId);
-                break;
-            case "Restore":
-                doFileAction('restore', fileId);
-                file.remove();
-                updateFileCols();
-                break;
-            case "Delete":
-                doFileAction('delete', fileId);
-                file.remove();
-                updateFileCols();
-                break;
+function bindContextMenu() {
+    $('.file-col').contextMenu({
+        menuSelector: "#context-menu",
+        menuSelected: function (invokedOn, selectedMenu) {
+            var file = $('#'+invokedOn+'-col');
+            var fileId = invokedOn.replace("file-", '');
+            // var msg = "You selected the menu item '" + selectedMenu.text() + "' on the value '" + invokedOn + "'";
+            // console.log(msg);
+            // console.log(file, fileId);
+            switch (selectedMenu.text()) {
+                case "Download":
+                    var name = $('#file-'+fileId+'-name').val();
+                    var ext = $('#file-'+fileId+'-ext').val();
+                    var file = name+ext;
+                    $('#download').attr('href', "uploads/"+file);
+                    $('#download').prop('download', file);
+                    break;
+                case "Rename":
+                    $('#newName').attr('value', $('#file-'+fileId+'-name').val());
+                    $('#rename-id').attr('value', fileId);
+                    break;
+                case "Restore":
+                    doFileAction('restore', fileId);
+                    file.remove();
+                    updateFiles();
+                    break;
+                case "Delete":
+                    doFileAction('delete', fileId);
+                    file.remove();
+                    updateFiles();
+                    break;
+            }
         }
-    }
-});
-
-function updateFileCols() {
-    $('.file-blank-col').remove();
-    var col = $('.file-col:visible').length;
-    var rem = (6 - (col % 6)) % 6;
-    for (var i = 0; i < rem; ++i) {
-        $('.container .row').append('<div class="file-blank-col"></div>');
-    }
+    });
 }
 
 function doFileAction(action, file, rename=false) {
@@ -187,7 +201,7 @@ $('#search').on('input', function() {
             $(files[i]).show();
         }
     }
-    updateFileCols();
+    updateFiles();
 });
 
 $('#form-upload').on('change', function() {

@@ -7,7 +7,10 @@ if ($_SESSION['logged_in']['usergroup'] != 1) {
   exit;
 }
 
-include('includes/header.php');
+include('includes/header.php'); ?>
+<div class="page-header" id="page-header">
+<div class="container text-center">
+<h2 class="text-muted" id="trash-empty" style="display:none">Trash is Empty</h2><?php
 
 $hQuery = $mysqli->query("SELECT * FROM file WHERE in_trash=1");
 if ($mysqli->connect_error) {
@@ -15,11 +18,8 @@ if ($mysqli->connect_error) {
 }
 
 if ($hQuery->num_rows > 0) {
-
-  echo '<div class="container overflow-auto" style="min-height:74vh">';
-  echo '<div class="row ml-auto mr-auto">';
-
   // list all files in trash
+  echo '<div class="row ml-auto mr-auto">';
   while ($row = $hQuery->fetch_assoc()) {
     echo '<div class="file-col" id="file-'.$row['id'].'-col">';
     echo '<i class="fa fa-file-text" id="file-'.$row['id'].'"></i>';
@@ -30,8 +30,7 @@ if ($hQuery->num_rows > 0) {
     echo '<input class="d-none" type="text" value="'.$row['extension'].'" id="file-'.$row['id'].'-ext">';
     echo '</div>';
   }
-  echo '</div></div>';
-  ?>
+  echo '</div>'; ?>
   <ul id="context-menu" class="dropdown-menu" role="menu" style="display:none">
     <li><a href="#">Restore</a></li>
     <li><a href="#">Delete</a></li>
@@ -41,8 +40,7 @@ if ($hQuery->num_rows > 0) {
     <input type="text" name="file" id="file-id">
     <input type="text" name="new_name" id="file-rename">
   </form>
-  <?php
-} else {
-  echo '<div class="page-header"><div class="container text-center"><h2 class="text-muted">Trash is Empty</h2></div></div>';
-}
-include('includes/footer.php'); ?>
+  <?php } ?>
+</div>
+</div>
+<?php include('includes/footer.php'); ?>
