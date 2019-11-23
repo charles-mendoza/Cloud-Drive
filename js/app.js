@@ -1,3 +1,35 @@
+var files = [];
+
+$(function() {
+    // adjust page alignments
+    if ($('.file-col').length > 0) {
+        $('#btnEmptyTrash').removeClass('btn-disabled');
+        $('#btnEmptyTrash').addClass('btn-danger');
+        $('footer').css('bottom','auto');
+        files = $('.file-col');
+    } else {
+        $(this).addClass('login-page');
+        $('#sectionsNav').addClass('fixed-top');
+    }
+    $('footer').removeClass('d-none');
+
+    // upload progress bar
+    var bar = $('.progress-bar');
+    $('#form-upload').ajaxForm({
+        beforeSend: function() {
+            var percentVal = '0%';
+            bar.width(percentVal);
+            $('#modal-upload').modal('toggle');
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            bar.width(percentVal);
+        },
+        complete: function(xhr) {
+        }
+    });
+});
+
 (function ($, window) {
 
     $.fn.contextMenu = function (settings) {
@@ -74,22 +106,24 @@ $('.container .file-col').contextMenu({
                 break;
             case "Restore":
                 doFileAction('restore', fileId);
-                updateFileCols(file);
+                file.remove();
+                updateFileCols();
                 break;
             case "Delete":
                 doFileAction('delete', fileId);
-                updateFileCols(file);
+                file.remove();
+                updateFileCols();
                 break;
         }
     }
 });
 
-function updateFileCols(file) {
-    file.remove();
-    if ($('.file-col').length % 6 != 0) {
+function updateFileCols() {
+    $('.file-blank-col').remove();
+    var col = $('.file-col').length;
+    var rem = (6 - (col % 6)) % 6;
+    for (var i = 0; i < rem; ++i) {
         $('.container .row').append('<div class="file-blank-col"></div>');
-    } else {
-        $('.file-blank-col').remove();
     }
 }
 
@@ -130,41 +164,31 @@ function renameFile(id, name) {
     $('#file-'+id+'-col p').html(name);
 }
 
-$('#btnEmptyTrash').on('click', function(e) {
+$('#btnEmptyTrash').on('click', function() {
     $('#file-action').attr('value', 'empty_trash');
     $('#file-action-form').submit();
 });
 
-$('#form-upload').on('change', function() {
-    $('#form-upload').submit();
+$('#search').on('input', function() {
+    if ($(this).val().length > 0) {
+        for (var i = 0; i < files.length; ++i) {
+            var name = $(files[i]).find('input[id*="-name"]').val();
+            var ext = $(files[i]).find('input[id*="-ext"]').val();
+            var file = name+ext;
+            if (file.search($(this).val()) == -1) {
+                $('#'+$(files[i]).attr('id')).remove();
+            }
+        }
+    } else {
+        for (var i = 0; i < files.length; ++i) {
+            if ($('#'+$(files[i]).attr('id')).length == 0) {
+                $('.container .row').append($(files[i]));
+            }
+        }
+    }
+    updateFileCols();
 });
 
-$(function() {
-
-    // adjust page alignments
-    if ($('.file-col').length > 0) {
-        $('#btnEmptyTrash').removeClass('btn-disabled');
-        $('#btnEmptyTrash').addClass('btn-danger');
-        $('footer').css('bottom','auto');
-    } else {
-        $(this).addClass('login-page');
-        $('#sectionsNav').addClass('fixed-top');
-    }
-    $('footer').removeClass('d-none');
-
-    // upload progress bar
-    var bar = $('.progress-bar');
-    $('#form-upload').ajaxForm({
-        beforeSend: function() {
-            var percentVal = '0%';
-            bar.width(percentVal);
-            $('#modal-upload').modal('toggle');
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-            var percentVal = percentComplete + '%';
-            bar.width(percentVal);
-        },
-        complete: function(xhr) {
-        }
-    });
+$('#form-upload').on('change', function() {
+    $('#form-upload').submit();
 });
