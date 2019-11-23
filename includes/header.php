@@ -33,7 +33,7 @@ switch (basename($_SERVER['PHP_SELF'])) {
   <nav class="navbar navbar-transparent navbar-color-on-scroll <?php if (!isset($_SESSION['logged_in'])) echo "fixed-top" ?> navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
     <div class="container">
       <div class="navbar-translate">
-        <a class="navbar-brand" href="index.php"><b><i class="fa fa-cloud"></i> DRIVE</b></a>
+        <a class="navbar-brand" href="."><b><i class="fa fa-cloud"></i> DRIVE</b></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="sr-only">Toggle navigation</span>
           <span class="navbar-toggler-icon"></span>
@@ -57,7 +57,7 @@ switch (basename($_SERVER['PHP_SELF'])) {
               <i class="material-icons">home</i>
             </a>
           </li>
-          <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] == 1) { ?>
+          <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] == 1 && basename($_SERVER['PHP_SELF']) == 'index.php') { ?>
           <li class="nav-item">
             <form class="form-upload" id="form-upload" method="post" action="action" enctype="multipart/form-data">
               <label class="m-0 p-0" for="file-input">
