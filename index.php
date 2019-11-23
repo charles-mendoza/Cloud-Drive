@@ -14,7 +14,7 @@ if (isset($_SESSION['logged_in'])) {
     echo '<div class="container overflow-auto" style="min-height:74vh">';
     echo '<div class="row ml-auto mr-auto">';
 
-    // list all files that aren't in trash
+    // list all files not in trash
     while ($row = $hQuery->fetch_assoc()) {
       echo '<div class="file-col" id="file-'.$row['id'].'-col">';
       echo '<i class="fa fa-file-text" id="file-'.$row['id'].'"></i>';
@@ -25,65 +25,59 @@ if (isset($_SESSION['logged_in'])) {
       echo '<input class="d-none" type="text" value="'.$row['extension'].'" id="file-'.$row['id'].'-ext">';
       echo '</div>';
     }
-
-    // fill remaining empty columns so files are aligned
-    $r = (FILECOL_MAX - ($hQuery->num_rows % FILECOL_MAX)) % FILECOL_MAX;
-    for ($i = 0; $i < $r; $i++) {
-      echo '<div class="file-blank-col"></div>';
-    }
     echo '</div></div>';
-
+    ?>
+    <ul id="context-menu" class="dropdown-menu" role="menu" style="display:none">
+      <li><a id="download">Download</a></li>
+      <?php
+      if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] == 1) {
+        echo '<li><a data-toggle="modal" data-target="#modal-rename">Rename</a></li>';
+        echo '<li><a>Delete</a></li>';
+      }
+      ?>
+    </ul>
+    <form class="d-none" id="file-action-form" method="POST" action="action.php">
+      <input type="text" name="action" id="file-action">
+      <input type="text" name="file" id="file-id">
+      <input type="text" name="new_name" id="file-rename">
+    </form>
+    <div class="modal fade" id="modal-rename">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="d-none" id="rename-id">
+            <input type="text" class="form-control" id="newName" autofocus>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success" id="btnRename">Rename</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="modal-upload">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="progress">
+              <div class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success" type="button" data-dismiss="modal" aria-label="Close">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php
   } else {
     echo '<div class="page-header"><div class="container text-center"><h2 class="text-muted">No Files</h2></div></div>';
   }
 } else {
-  echo '<div class="page-header"><div class="container text-center"><h2 class="text-muted">Login to Explore Files</h2></div></div>';
+  echo '<div class="page-header"><div class="container text-center"><h2><a class="text-muted" href="login.php">Login to View Files</a></h2></div></div>';
 }
-?>
-<ul id="context-menu" class="dropdown-menu" role="menu" style="display:none">
-  <li><a id="download">Download</a></li>
-  <?php
-  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] == 1) {
-    echo '<li><a data-toggle="modal" data-target="#modal-rename">Rename</a></li>';
-    echo '<li><a>Delete</a></li>';
-  }
-  ?>
-</ul>
-<form class="d-none" id="file-action-form" method="POST" action="action.php">
-  <input type="text" name="action" id="file-action">
-  <input type="text" name="file" id="file-id">
-  <input type="text" name="new_name" id="file-rename">
-</form>
-<div class="modal fade" id="modal-rename">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="text" class="d-none" id="rename-id">
-        <input type="text" class="form-control" id="newName" autofocus>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-success" id="btnRename">Rename</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="modal-upload">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="progress">
-          <div class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-success" type="button" data-dismiss="modal" aria-label="Close">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<?php include('includes/footer.php'); ?>
+include('includes/footer.php'); ?>
