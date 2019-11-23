@@ -44,8 +44,12 @@ if (isset($_SESSION['logged_in'])) {
 ?>
 <ul id="context-menu" class="dropdown-menu" role="menu" style="display:none">
   <li><a id="download">Download</a></li>
-  <li><a data-toggle="modal" data-target="#modal-rename">Rename</a></li>
-  <li><a>Delete</a></li>
+  <?php
+  if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] == 1) {
+    echo '<li><a data-toggle="modal" data-target="#modal-rename">Rename</a></li>';
+    echo '<li><a>Delete</a></li>';
+  }
+  ?>
 </ul>
 <form class="d-none" id="file-action-form" method="POST" action="action.php">
   <input type="text" name="action" id="file-action">
