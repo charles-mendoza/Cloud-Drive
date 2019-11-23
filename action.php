@@ -109,7 +109,8 @@ case 'upload':
 		}
 
 		$id = mysqli_insert_id($mysqli);
-		$files[$id] = array($name, $ext);
+		$files[$id]['name'] = $name;
+		$files[$id]['ext'] = $ext;
 
 		move_uploaded_file($temp, UPLOAD_DIR.$file);
 	}

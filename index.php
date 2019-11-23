@@ -71,13 +71,16 @@ if ($loggedIn) {
   <div class="modal fade" id="modal-upload" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
+        <div class="modal-header">
+          <strong>Uploading Files</strong>
+        </div>
         <div class="modal-body">
           <div class="progress">
             <div class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-success" id="btnUploadClose" type="button" data-dismiss="modal" aria-label="Close">Close</button>
+          <button class="btn" id="btnUploadClose" type="button" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
       </div>
     </div>

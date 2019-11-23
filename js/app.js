@@ -27,10 +27,28 @@ $(function() {
         },
         complete: function(xhr) {
             $('#btnUploadClose').removeClass('btn-disabled');
-            console.log(xhr.responseText);
+            $('#btnUploadClose').addClass('btn-success');
+            var files = JSON.parse(xhr.responseText);
+            for (f in files) {
+                addFile(f, files[f].name, files[f].ext);
+            }
+            bindContextMenu();
         }
     });
 });
+
+function addFile(id, name, ext) {
+    $('.container .row').append(
+        '<div class="file-col" id="file-'+id+'-col">' +
+        '<i class="fa fa-file-text" id="file-'+id+'"></i>' +
+        '<p id="file-'+id+'"></p>' +
+        '<input class="d-none" type="text" value="'+name+'" id="file-'+id+'-name">' +
+        '<input class="d-none" type="text" value="'+ext+'" id="file-'+id+'-ext">' +
+        '</div>'
+    );
+    renameFile(id, name+ext);
+    updateFiles();
+}
 
 function updateFiles() {
     $('.file-blank-col').remove();
@@ -45,12 +63,18 @@ function updateFiles() {
         $('#page-header').removeClass('page-header');
         $('#trash-empty').hide();
         $('#no-files').hide();
+        if (col > 18) {
+            $('footer').css('bottom', 'auto');
+        } else {
+            $('footer').css('bottom', 0);
+        }
     } else {
         $(this).addClass('login-page');
         $('#sectionsNav').addClass('fixed-top');
         $('#page-header').addClass('page-header');
         $('#trash-empty').show();
         $('#no-files').show();
+        $('footer').css('bottom', 0);
     }
 }
 
@@ -208,9 +232,6 @@ $('#search').on('input', function() {
 
 $('#form-upload').on('change', function() {
     $('#btnUploadClose').addClass('btn-disabled');
-    $('#modal-upload').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
+    $('#modal-upload').modal('toggle');
     $('#form-upload').submit();
 });
