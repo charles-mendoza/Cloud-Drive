@@ -78,6 +78,8 @@ if ($_SESSION['logged_in']['usergroup'] != 1) {
 switch ($_POST['action']) {
 
 case 'upload':
+
+	$files = array();
 	
 	// upload multiple files
 	foreach($_FILES['files']['tmp_name'] as $key=>$tmp_name) {
@@ -106,8 +108,13 @@ case 'upload':
 			die("ERROR: ".$mysqli->error);
 		}
 
+		$id = mysqli_insert_id($mysqli);
+		$files[$id] = array($name, $ext);
+
 		move_uploaded_file($temp, UPLOAD_DIR.$file);
 	}
+
+	echo json_encode($files);
 
 	exit;
 
