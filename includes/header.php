@@ -1,5 +1,4 @@
 <?php 
-
 $title = "Cloud Drive";
 switch (basename($_SERVER['PHP_SELF'])) {
   case 'login.php':
@@ -12,7 +11,6 @@ switch (basename($_SERVER['PHP_SELF'])) {
     $title .= " - Trash";
     break;
 }
-
 ?>
 <!DOCTYPE html>
 <html>
