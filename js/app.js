@@ -177,7 +177,9 @@ $('#search').on('input', function() {
             var ext = $(files[i]).find('input[id*="-ext"]').val();
             var file = name+ext;
             if (file.search($(this).val()) == -1) {
-                $('#'+$(files[i]).attr('id')).hide();
+                $(files[i]).hide();
+            } else {
+                $(files[i]).show();
             }
         }
     } else {
