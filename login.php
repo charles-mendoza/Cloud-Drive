@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-4 col-md-6 ml-auto mr-auto">
-        <div class="card card-login">
+        <div class="card card-login" style="display:none">
           <form class="form" role="form" method="post" action="action.php">
             <?php if (isset($_GET['error']) && $_GET['error'] == "invalid-user") { ?>
               <div class="alert alert-danger alert-block">

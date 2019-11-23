@@ -3,6 +3,8 @@ var files = [];
 $(function() {
     // bind context menu for files
     bindContextMenu();
+    
+    $('.card-login').fadeIn('fast');
 
     // adjust alignments
     updateFiles();
