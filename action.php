@@ -55,7 +55,7 @@ case 'signup':
 	if ($hQuery->num_rows == 0) {
 		$salt = uniqid(mt_rand(), true);
 		$password = md5(md5($password).$salt);
-		$hQuery = $mysqli->query("INSERT INTO user VALUES('$id', '$password', '$salt', '2')");
+		$hQuery = $mysqli->query("INSERT INTO user VALUES('$id', '$password', '$salt', 2)");
 		if (!$hQuery) {
 			die("ERROR: ".$mysqli->error);
 		}
