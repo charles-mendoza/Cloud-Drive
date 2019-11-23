@@ -141,14 +141,19 @@ $('#form-upload').on('change', function() {
 
 $(function() {
 
-    // update empty trash button
+    // adjust page alignments
     if ($('.file-col').length > 0) {
         $('#btnEmptyTrash').removeClass('btn-disabled');
         $('#btnEmptyTrash').addClass('btn-danger');
+        $('footer').css('bottom','auto');
+    } else {
+        $(this).addClass('login-page');
+        $('#sectionsNav').addClass('fixed-top');
     }
+    $('footer').removeClass('d-none');
 
+    // upload progress bar
     var bar = $('.progress-bar');
-
     $('#form-upload').ajaxForm({
         beforeSend: function() {
             var percentVal = '0%';

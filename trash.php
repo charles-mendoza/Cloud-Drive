@@ -26,7 +26,7 @@ if (!isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] != 1) 
   <link href="css/material-kit.css?v=2.0.4'" rel="stylesheet" />
   <link href="css/app.css" rel="stylesheet" />
 </head>
-<body class="sidebar-collapse">
+<body class="login-page sidebar-collapse">
   <?php
   include('includes/navbar.php');
 
@@ -37,7 +37,7 @@ if (!isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] != 1) 
 
   if ($hQuery->num_rows > 0) {
 
-    echo '<div class="container overflow-auto" style="min-height:40em">';
+    echo '<div class="container overflow-auto" style="min-height:74vh">';
     echo '<div class="row ml-auto mr-auto">';
 
     // list all files that aren't in trash
@@ -63,12 +63,6 @@ if (!isset($_SESSION['logged_in']) && $_SESSION['logged_in']['usergroup'] != 1) 
 
   } else {
     echo '<div class="page-header"><div class="container text-center"><h2 class="text-muted">Trash is Empty</h2></div></div>';
-    ?>
-    <script>
-      document.body.classList.add("login-page");
-      document.getElementById("sectionsNav").classList.add("fixed-top");
-    </script>
-    <?php
   }
   ?>
   <ul id="context-menu" class="dropdown-menu" role="menu" style="display:none">
