@@ -7,11 +7,11 @@ Options -Indexes
 IndexIgnore *
 
 # custom error scripts
-ErrorDocument 400 /cdrive/error/400.html
-ErrorDocument 401 /cdrive/error/401.html
-ErrorDocument 403 /cdrive/error/403.html
-ErrorDocument 404 /cdrive/error/404.html
-ErrorDocument 500 /cdrive/error/500.html
+ErrorDocument 400 /error/400.html
+ErrorDocument 401 /error/401.html
+ErrorDocument 403 /error/403.html
+ErrorDocument 404 /error/404.html
+ErrorDocument 500 /error/500.html
 
 # enable page access without extension
 RewriteCond %{REQUEST_FILENAME} !-d
