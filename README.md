@@ -4,6 +4,6 @@ A simple cloud storaging site for uploading and managing files. Using [Material 
 
 ### Installing
 
-Create database in phpMyAdmin. An installation script is provided to easily configure database connection settings. Go to install.php to configure the database connection and admin account creation.
+Create database in phpMyAdmin. An installation script is provided to easily configure database and tables. Go to install.php to configure the database connection and admin account creation.
 
 And you're ready to go!
