@@ -9,6 +9,10 @@ define('FILENAME_MAX', 13);
 // max number of columns in explorer
 define('FILECOL_MAX', 6);
 
+// login hashing defines
+define('HASH_ALGORITHM', 'sha512');
+define('HASH_COMPLEXITY', 414912);
+
 // database credentials
 define('DB_SERVER', '{db_server}');
 define('DB_USERNAME', '{db_username}');

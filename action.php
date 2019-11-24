@@ -53,8 +53,10 @@ case 'signup':
 	}
 
 	if ($hQuery->num_rows == 0) {
-		$salt = uniqid(mt_rand(), true);
-		$password = md5(md5($password).$salt);
+		$salt = hash(HASH_ALGORITHM, random_bytes(256));
+		for ($i = 0; $i < HASH_COMPLEXITY; $i++) {
+			$password = hash(HASH_ALGORITHM, $password.$salt);
+		}
 		$hQuery = $mysqli->query("INSERT INTO user VALUES('$id', '$password', '$salt', 2)");
 		if (!$hQuery) {
 			die("ERROR: ".$mysqli->error);
