@@ -1,38 +1,5 @@
 <?php
 
-$php_version = phpversion();
-if ($php_version < 5) {
-  $error = true;
-  $php_error = "PHP version is $php_version - too old!";
-}
-
-function mysqlversion() { 
-  $output = shell_exec('mysql -V');    
-  preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', $output, $version); 
-  return @$version[0]?$version[0]:-1; 
-}
- 
-$mysql_version = mysqlversion();        
-if ($mysql_version < 5) {
-  $error = true;
-  if ($mysql_version == -1) $mysql_error = "MySQL version will be checked at the next step.";
-  else $mysql_error = "MySQL version is $mysql_version. Version 5 or newer is required.";
-}
-
-$_SESSION['install_session_check'] = 1;
-if(empty($_SESSION['install_session_check'])) {
-  $error = true;
-  $session_error = "Sessions must be enabled!";
-}
-
-$upload_dir = "uploads";
-if (!file_exists($upload_dir)) {
-  if (!mkdir($upload_dir, 0777, true)) {
-    $error = true;
-    $folder_error = "Failed to create uploads folder!";
-  }
-}
-
 $config = file_get_contents(__DIR__.'/includes/config.php');
 $dbDone = strpos($config, "{db_server}") == false;
 
@@ -40,63 +7,72 @@ if (isset($_POST['action'])) {
   switch ($_POST['action']) {
     case 'database':
       $mysqli = mysqli_connect($_POST['db_server'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
-      if ($mysqli) {
 
-        $q="DROP TABLE IF EXISTS `user`;";
-        mysqli_query($mysqli,$q);
-
-        $q="CREATE TABLE `user` (
-            `id` int(11) NOT NULL,
-            `password` varchar(100) NOT NULL,
-            `salt` varchar(100) NOT NULL,
-            `usergroup` int(11) NOT NULL DEFAULT '2',
-            PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
-        mysqli_query($mysqli,$q);
-
-        $q="DROP TABLE IF EXISTS `usergroup`;";
-        mysqli_query($mysqli,$q);
-
-        $q="CREATE TABLE `usergroup` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `description` varchar(100) NOT NULL,
-            PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
-        mysqli_query($mysqli,$q);
-
-        $q="INSERT INTO `usergroup` (`id`, `description`) VALUES
-            (1, 'Administrator'),
-            (2, 'Student');";
-        mysqli_query($mysqli,$q);
-
-        $q="DROP TABLE IF EXISTS `file`;";
-        mysqli_query($mysqli,$q);
-
-        $q="CREATE TABLE `file` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `name` varchar(260) NOT NULL,
-            `extension` varchar(260) NOT NULL,
-            `in_trash` tinyint(4) NOT NULL DEFAULT '0',
-            PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
-        mysqli_query($mysqli,$q);
-
-        // change mysql connection variables
-        $str = file_get_contents(__DIR__.'/includes/config.php');
-        $str = str_replace('if (DB_SERVER == "{db_server}") { header("location: install"); exit; }', '', $str);
-        $str = str_replace("{db_server}", $_POST['db_server'], $str);
-        $str = str_replace("{db_username}", $_POST['db_username'], $str);
-        $str = str_replace("{db_password}", $_POST['db_password'], $str);
-        $str = str_replace("{db_name}", $_POST['db_name'], $str);
-        $fp = fopen('includes/config.php', 'wb');
-        fwrite($fp, $str);
-        fclose($fp);
-        chmod('includes/config.php', 0666);
-
-        $dbDone = true;
-      } else {
-        $db_error = "MySQL error: ".mysqli_connect_error();
+      if (!$mysqli) {
+        $db_error = true;
+        $db_error_msg = "MySQL error: ".mysqli_connect_error();
+        break;
       }
+
+      if ($mysqli->query("SHOW DATABASES LIKE '".$_POST['db_name']."'")->num_rows == 0) {
+        $db_error = true;
+        $db_error_msg = "MySQL error: Unknown database '".$_POST['db_name']."'";
+        break;
+      }
+
+      $q="DROP TABLE IF EXISTS `user`;";
+      mysqli_query($mysqli,$q);
+
+      $q="CREATE TABLE `user` (
+          `id` int(11) NOT NULL,
+          `password` varchar(100) NOT NULL,
+          `salt` varchar(100) NOT NULL,
+          `usergroup` int(11) NOT NULL DEFAULT '2',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+      mysqli_query($mysqli,$q);
+
+      $q="DROP TABLE IF EXISTS `usergroup`;";
+      mysqli_query($mysqli,$q);
+
+      $q="CREATE TABLE `usergroup` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `description` varchar(100) NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+      mysqli_query($mysqli,$q);
+
+      $q="INSERT INTO `usergroup` (`id`, `description`) VALUES
+          (1, 'Administrator'),
+          (2, 'Student');";
+      mysqli_query($mysqli,$q);
+
+      $q="DROP TABLE IF EXISTS `file`;";
+      mysqli_query($mysqli,$q);
+
+      $q="CREATE TABLE `file` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `name` varchar(260) NOT NULL,
+          `extension` varchar(260) NOT NULL,
+          `in_trash` tinyint(4) NOT NULL DEFAULT '0',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+      mysqli_query($mysqli,$q);
+
+      // change mysql connection variables
+      $str = file_get_contents(__DIR__.'/includes/config.php');
+      $str = str_replace('if (DB_SERVER == "{db_server}") { header("location: install"); exit; }', '', $str);
+      $str = str_replace("{db_server}", $_POST['db_server'], $str);
+      $str = str_replace("{db_username}", $_POST['db_username'], $str);
+      $str = str_replace("{db_password}", $_POST['db_password'], $str);
+      $str = str_replace("{db_name}", $_POST['db_name'], $str);
+      $fp = fopen('includes/config.php', 'wb');
+      fwrite($fp, $str);
+      fclose($fp);
+      chmod('includes/config.php', 0666);
+
+      $dbDone = true;
+
       break;
     case 'admin':
       require('includes/config.php');
@@ -169,23 +145,39 @@ if (isset($_POST['action'])) {
           </div>
         </div>
         <?php
-          if (!empty($db_error)) {
-            echo '<div class="w-100"><div class="alert alert-danger">'.$db_error.'</div></div>';
+          if (!empty($db_error_msg)) {
+            echo '<div class="w-100"><div class="alert alert-danger">'.$db_error_msg.'</div></div>';
           }
         } else { ?>
           <div class="col-md-5 ml-auto mr-auto" id="error-checker">
           <div class="card">
             <div class="card-body pt-4">
               <?php
+
+              $php_version = phpversion();
+              if ($php_version < 5) {
+                $error = true;
+                $php_error = "PHP version is $php_version - too old!";
+              }
+
+              $_SESSION['install_session_check'] = 1;
+              if(empty($_SESSION['install_session_check'])) {
+                $error = true;
+                $session_error = "Sessions must be enabled!";
+              }
+
+              $upload_dir = "uploads";
+              if (!file_exists($upload_dir)) {
+                if (!mkdir($upload_dir, 0777, true)) {
+                  $error = true;
+                  $folder_error = "Failed to create uploads folder!";
+                }
+              }
+
               if (empty($php_error)) {
                 echo '<div class="alert alert-success">PHP '.$php_version.' - OK!</div>';
               } else {
                 echo '<div class="alert alert-danger">'.$php_error.'</div>';
-              }
-              if (empty($mysql_error)) {
-                echo '<div class="alert alert-success">MySQL '.$mysql_version.' - OK!</div>';
-              } else {
-                echo '<div class="alert alert-danger">'.$mysql_error.'</div>';
               }
               if (empty($session_error)) {
                 echo '<div class="alert alert-success">Sessions - OK!</div>';
@@ -239,7 +231,7 @@ if (isset($_POST['action'])) {
   <script type="text/javascript">
     function nextStep() {
       document.getElementById("error-checker").style.display = "none";
-      document.getElementById("db-setup").style.display = "block";
+      document.getElementById("admin-setup").style.display = "block";
     }
   </script>
 </body>
