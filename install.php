@@ -126,41 +126,7 @@ if (isset($_POST['action'])) {
     <div class="container">
     	<div class="row">
         <?php if (!$dbDone) { ?>
-          <div class="col-md-5 ml-auto mr-auto" id="error-checker">
-          <div class="card">
-            <div class="card-body pt-4">
-              <?php
-              if (empty($php_error)) {
-                echo '<div class="alert alert-success">PHP '.$php_version.' - OK!</div>';
-              } else {
-                echo '<div class="alert alert-danger">'.$php_error.'</div>';
-              }
-              if (empty($mysql_error)) {
-                echo '<div class="alert alert-success">MySQL '.$mysql_version.' - OK!</div>';
-              } else {
-                echo '<div class="alert alert-danger">'.$mysql_error.'</div>';
-              }
-              if (empty($session_error)) {
-                echo '<div class="alert alert-success">Sessions - OK!</div>';
-              } else {
-                echo '<div class="alert alert-danger">'.$session_error.'</div>';
-              }
-              if (empty($session_error)) {
-                echo '<div class="alert alert-success">Upload Folder - OK!</div>';
-              } else {
-                echo '<div class="alert alert-danger">'.$folder_error.'</div>';
-              }
-              if (!empty($db_error)) {
-                echo '<div class="alert alert-danger">'.$db_error.'</div>';
-              }
-              ?>
-              <div class="text-center">
-                <button class="btn btn-round <?php if ($error) echo 'btn-disabled'; else echo 'btn-success'; ?>" onclick="nextStep()">NEXT</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ml-auto mr-auto" id="db-setup" style="display:none">
+        <div class="col-md-4 ml-auto mr-auto" id="db-setup">
           <div class="card card-login">
             <div class="card-header card-header-success text-center">
                 <h4 class="card-title">DATABASE</h4>
@@ -202,8 +168,43 @@ if (isset($_POST['action'])) {
             </form>
           </div>
         </div>
-      <?php } else { ?>
-        <div class="col-md-4 ml-auto mr-auto" id="admin-setup">
+        <?php
+          if (!empty($db_error)) {
+            echo '<div class="w-100"><div class="alert alert-danger">'.$db_error.'</div></div>';
+          }
+        } else { ?>
+          <div class="col-md-5 ml-auto mr-auto" id="error-checker">
+          <div class="card">
+            <div class="card-body pt-4">
+              <?php
+              if (empty($php_error)) {
+                echo '<div class="alert alert-success">PHP '.$php_version.' - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$php_error.'</div>';
+              }
+              if (empty($mysql_error)) {
+                echo '<div class="alert alert-success">MySQL '.$mysql_version.' - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$mysql_error.'</div>';
+              }
+              if (empty($session_error)) {
+                echo '<div class="alert alert-success">Sessions - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$session_error.'</div>';
+              }
+              if (empty($session_error)) {
+                echo '<div class="alert alert-success">Upload Folder - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$folder_error.'</div>';
+              }
+              ?>
+              <div class="text-center">
+                <button class="btn btn-round <?php if ($error) echo 'btn-disabled'; else echo 'btn-success'; ?>" onclick="nextStep()">NEXT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 ml-auto mr-auto" id="admin-setup" style="display:none">
           <div class="card card-login">
             <div class="card-header card-header-success text-center">
                 <h4 class="card-title">ADMINISTRATOR</h4>
