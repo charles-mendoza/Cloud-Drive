@@ -1,13 +1,46 @@
 <?php
 
-$str = file_get_contents(__DIR__.'/includes/config.php');
-$dbDone = strpos($str, "{db_server}") == false;
+$php_version = phpversion();
+if ($php_version < 5) {
+  $error = true;
+  $php_error = "PHP version is $php_version - too old!";
+}
+
+function mysqlversion() { 
+  $output = shell_exec('mysql -V');    
+  preg_match('@[0-9]+\.[0-9]+\.[0-9]+@', $output, $version); 
+  return @$version[0]?$version[0]:-1; 
+}
+ 
+$mysql_version = mysqlversion();        
+if ($mysql_version < 5) {
+  $error = true;
+  if ($mysql_version == -1) $mysql_error = "MySQL version will be checked at the next step.";
+  else $mysql_error = "MySQL version is $mysql_version. Version 5 or newer is required.";
+}
+
+$_SESSION['install_session_check'] = 1;
+if(empty($_SESSION['install_session_check'])) {
+  $error = true;
+  $session_error = "Sessions must be enabled!";
+}
+
+$upload_dir = "uploads";
+if (!file_exists($upload_dir)) {
+  if (!mkdir($upload_dir, 0777, true)) {
+    $error = true;
+    $folder_error = "Failed to create uploads folder!";
+  }
+}
+
+$config = file_get_contents(__DIR__.'/includes/config.php');
+$dbDone = strpos($config, "{db_server}") == false;
 
 if (isset($_POST['action'])) {
   switch ($_POST['action']) {
     case 'database':
-      $mysqli = new mysqli($_POST['db_server'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
-      if (!$mysqli->connect_error) {
+      $mysqli = mysqli_connect($_POST['db_server'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
+      if ($mysqli) {
 
         $q="DROP TABLE IF EXISTS `user`;";
         mysqli_query($mysqli,$q);
@@ -48,6 +81,7 @@ if (isset($_POST['action'])) {
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
         mysqli_query($mysqli,$q);
 
+        // change mysql connection variables
         $str = file_get_contents(__DIR__.'/includes/config.php');
         $str = str_replace('if (DB_SERVER == "{db_server}") { header("location: install"); exit; }', '', $str);
         $str = str_replace("{db_server}", $_POST['db_server'], $str);
@@ -57,8 +91,11 @@ if (isset($_POST['action'])) {
         $fp = fopen('includes/config.php', 'wb');
         fwrite($fp, $str);
         fclose($fp);
+        chmod('includes/config.php', 0666);
 
         $dbDone = true;
+      } else {
+        $db_error = "MySQL error: ".mysqli_connect_error();
       }
       break;
     case 'admin':
@@ -73,7 +110,6 @@ if (isset($_POST['action'])) {
       exit;
   }
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -90,8 +126,45 @@ if (isset($_POST['action'])) {
     <div class="container">
     	<div class="row">
         <?php if (!$dbDone) { ?>
-        <div class="col-md-4 ml-auto mr-auto" id="db-setup">
+          <div class="col-md-5 ml-auto mr-auto" id="error-checker">
+          <div class="card">
+            <div class="card-body pt-4">
+              <?php
+              if (empty($php_error)) {
+                echo '<div class="alert alert-success">PHP '.$php_version.' - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$php_error.'</div>';
+              }
+              if (empty($mysql_error)) {
+                echo '<div class="alert alert-success">MySQL '.$mysql_version.' - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$mysql_error.'</div>';
+              }
+              if (empty($session_error)) {
+                echo '<div class="alert alert-success">Sessions - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$session_error.'</div>';
+              }
+              if (empty($session_error)) {
+                echo '<div class="alert alert-success">Upload Folder - OK!</div>';
+              } else {
+                echo '<div class="alert alert-danger">'.$folder_error.'</div>';
+              }
+              if (!empty($db_error)) {
+                echo '<div class="alert alert-danger">'.$db_error.'</div>';
+              }
+              ?>
+              <div class="text-center">
+                <button class="btn btn-round <?php if ($error) echo 'btn-disabled'; else echo 'btn-success'; ?>" onclick="nextStep()">NEXT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 ml-auto mr-auto" id="db-setup" style="display:none">
           <div class="card card-login">
+            <div class="card-header card-header-success text-center">
+                <h4 class="card-title">DATABASE</h4>
+            </div>
             <form class="form" role="form" action="install.php" method="POST" id="form-db-setup">
               <div class="card-body">
                 <div class="input-group">
@@ -123,7 +196,7 @@ if (isset($_POST['action'])) {
                   <input type="text" id="db_name" name="db_name" class="form-control" placeholder="Database" required>
                 </div>
                 <div class="mt-5 text-center">
-                  <button class="btn btn-round btn-success ml-3" name="action" value="database" type="submit" id="btn-db">SAVE</button>
+                  <button class="btn btn-round btn-success ml-3" name="action" value="database" type="submit" id="btn-db">CONNECT</button>
                 </div>
               </div>
             </form>
@@ -132,6 +205,9 @@ if (isset($_POST['action'])) {
       <?php } else { ?>
         <div class="col-md-4 ml-auto mr-auto" id="admin-setup">
           <div class="card card-login">
+            <div class="card-header card-header-success text-center">
+                <h4 class="card-title">ADMINISTRATOR</h4>
+            </div>
             <form class="form" role="form" action="install.php" method="POST" id="form-admin-setup">
               <div class="card-body">
                 <div class="input-group">
@@ -149,7 +225,7 @@ if (isset($_POST['action'])) {
                   <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                 </div>
                 <div class="mt-5 text-center">
-                  <button class="btn btn-round btn-success ml-3" name="action" value="admin" type="submit" id="btn-admin">Create Admin</button>
+                  <button class="btn btn-round btn-success ml-3" name="action" value="admin" type="submit" id="btn-admin">CREATE</button>
                 </div>
               </div>
             </form>
@@ -159,5 +235,11 @@ if (isset($_POST['action'])) {
       </div>
     </div>
   </div>
+  <script type="text/javascript">
+    function nextStep() {
+      document.getElementById("error-checker").style.display = "none";
+      document.getElementById("db-setup").style.display = "block";
+    }
+  </script>
 </body>
 </html>
